@@ -65,7 +65,7 @@
     <br/>
 
     
-    <span id="modified">Please answer the following question regarding the<span style="color:red"> machine-generated negative caption</span>:</span>
+    <span>Please answer the following question regarding the<span style="color:red"> machine-generated negative caption</span>:</span>
     <div class='row justify-content-left'>
       <div class='col-6 questions'></div>
     </div>
@@ -145,8 +145,6 @@
       $("<span style='display:inline'> True image caption: </span><span>" + input[idx]['caption'] + "</span><br>").appendTo($('#image-container'));
       $("<span style='display:inline'> Modifications: </span><span>" + input[idx]['modified'] + "</span><br>").appendTo($('#image-container'));
       $("<span><strong>Machie-generated negative caption: </strong></span><span>" + input[idx]['hn_text'] + "</span><br>").appendTo($('#image-container'));
-
-      $('#modified').html(input[idx]['modified']);
       
       // Set up the input question list
       $('.questions').html(`
