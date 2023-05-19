@@ -179,11 +179,11 @@
     }
 
     function saveCaption() {
-      let q1_ans = $('input:radio[name="q1"]:checked').val();
-      let q2_ans = $('input:radio[name="q2"]:checked').val();
-      let q3_ans = $('input:radio[name="q3"]:checked').val();
+      let q1_ans = $('input:radio[name="q1"]:checked').val()
+      let q2_ans = $('input:radio[name="q2"]:checked').val()
+      let q3_ans = $('input:radio[name="q3"]:checked').val()
       res = [q1_ans, q2_ans, q3_ans]
-      if (res === undefined) {
+      if (q1_ans === undefined || q1_ans === undefined || q3_ans === undefined) {
         alert("Please answer all questions before moving on.");
         return false;
       }

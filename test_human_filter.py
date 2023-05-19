@@ -39,6 +39,7 @@ question_map = {
     }
 }
 
+
 t_type = 'type1'
 data = []
 
@@ -54,7 +55,7 @@ for json_str in json_list:
     data.append(tmp)
 
 
-hit_ids = interface.launch_task(data, t_type, template='human_filter.html', title='Human Filter Test2', reward=0, tasks_per_hit=10)
+hit_ids = interface.launch_task(data, t_type, template='human_filter.html', title='Human Filter Test 3', reward=0, tasks_per_hit=10)
 print(hit_ids)
 
 # Use the code below to fetch the complete hit.
