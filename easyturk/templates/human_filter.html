@@ -98,7 +98,7 @@
       "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
       "caption": "caption",
       "hn_text": "new_caption",
-      "modifications": "what is modified from caption to new_caption",
+      "modified": "what is modified from caption to new_caption",
       "question 1": "q1",
       "question 2": "q2",
       "question 3": "q3"
@@ -142,8 +142,8 @@
       $('#task-instruction').text(input[idx]['task instruction'])
       $('#image-container').empty();
       $("<img style='width:60%; height:auto; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['filepath']).appendTo($('#image-container'));
-      $("<span style='display:inline'> Image caption: </span><span>" + input[idx]['caption'] + "</span><br>").appendTo($('#image-container'));
-      $("<span style='display:inline'> Modifications: </span><span>" + input[idx]['modifications'] + "</span><br>").appendTo($('#image-container'));
+      $("<span style='display:inline'> True image caption: </span><span>" + input[idx]['caption'] + "</span><br>").appendTo($('#image-container'));
+      $("<span style='display:inline'> Modifications: </span><span>" + input[idx]['modified'] + "</span><br>").appendTo($('#image-container'));
       $("<span><strong>Machie-generated negative caption: </strong></span><span>" + input[idx]['hn_text'] + "</span><br>").appendTo($('#image-container'));
 
       $('#modified').html(input[idx]['modified']);
