@@ -141,7 +141,7 @@
       // Set up the image
       $('#task-instruction').text(input[idx]['task instruction'])
       $('#image-container').empty();
-      $("<img style='width:60%; height:auto; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['filepath']).appendTo($('#image-container'));
+      $("<img style='height:300px; height:auto; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['filepath']).appendTo($('#image-container'));
       $("<span style='display:inline'> True image caption: </span><span>" + input[idx]['caption'] + "</span><br>").appendTo($('#image-container'));
       $("<span style='display:inline'> Modifications: </span><span>" + input[idx]['modified'] + "</span><br>").appendTo($('#image-container'));
       $("<span><strong>Machie-generated negative caption: </strong></span><span>" + input[idx]['hn_text'] + "</span><br>").appendTo($('#image-container'));
