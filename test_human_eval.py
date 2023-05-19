@@ -12,7 +12,7 @@ data = [{
         "image": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
         "captions": ["caption A", "caption B", "caption C", "caption D", "caption E"]
 }]
-# task_per_hit: how many data one worker can access.
+# task_per_hit: how many data a worker can access.
 hit_ids = interface.launch_task(data, template='human_eval.html', title='Human Evaluation', reward=0, tasks_per_hit=2)
 print(hit_ids)
 

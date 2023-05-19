@@ -1,7 +1,7 @@
 """Functions to launch, retrieve, and parse specific EasyTurk tasks.
 """
-
 from easyturk import EasyTurk
+
 
 
 def launch_verify_question_answer(data, reward=1.00, tasks_per_hit=50, sandbox=True):
@@ -88,7 +88,7 @@ def launch_verify_bbox(data, reward=1.00, tasks_per_hit=30, sandbox=False):
     return hit_ids
 
 
-def launch_task(data, template, title, reward=1.00, tasks_per_hit=10, sandbox=True):
+def launch_task(data, t_type, template, title, reward=1.00, tasks_per_hit=10, sandbox=True):
     """Launches HITs to ask workers to caption images.
 
     Args:
@@ -105,7 +105,8 @@ def launch_task(data, template, title, reward=1.00, tasks_per_hit=10, sandbox=Tr
     i = 0
     while i < len(data):
         hit = et.launch_hit(
-            template, data[i:i+tasks_per_hit], 
+            template, 
+            data[i:i+tasks_per_hit], 
             reward=reward,
             title=title,
             description=('Write captions about the contents of images.'),

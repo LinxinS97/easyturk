@@ -1,28 +1,60 @@
 from easyturk import EasyTurk, interface
+import json
+
+question_map = {
+    'type1': {
+        'question 1': 'aaa',
+        'question 2': 'bbb',
+        'question 3': 'ccc'
+    },
+    'type2': {
+        'question 1': 'aaa',
+        'question 2': 'bbb',
+        'question 3': 'ccc'
+    },
+    'type3': {
+        'question 1': 'aaa',
+        'question 2': 'bbb',
+        'question 3': 'ccc'
+    },
+    'type4': {
+        'question 1': 'aaa',
+        'question 2': 'bbb',
+        'question 3': 'ccc'
+    },
+    'type5': {
+        'question 1': 'aaa',
+        'question 2': 'bbb',
+        'question 3': 'ccc'
+    },
+    'type6': {
+        'question 1': 'aaa',
+        'question 2': 'bbb',
+        'question 3': 'ccc'
+    },
+    'type7': {
+        'question 1': 'aaa',
+        'question 2': 'bbb',
+        'question 3': 'ccc'
+    }
+}
+
+t_type = 'type1'
+data = []
+
+with open('dataset/chatgpt_swap_att_cos_filtered.jsonl', 'r', encoding='utf-8') as f:
+    json_list = list(f)
+
+for json_str in json_list:
+    tmp = {
+        **json.loads(json_str),
+        **question_map[t_type]
+    }
+    tmp['filepath'] = f'https://clip-comp.s3.amazonaws.com/val2017/{tmp["filepath"].split("/")[-1]}'
+    data.append(tmp)
 
 
-data = [{
-        "id": 0,
-        "task instruction": "task instruction",
-        "image": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
-        "caption": "caption",
-        "new_caption": "new_caption",
-        "modifications": "what is modified from caption to new_caption",
-        "question 1": "q1",
-        "question 2": "q2",
-        "question 3": "q3"
-}, {
-        "id": 1,
-        "task instruction": "task instruction",
-        "image": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
-        "caption": "caption",
-        "new_caption": "new_caption",
-        "modifications": "what is modified from caption to new_caption",
-        "question 1": "aaa",
-        "question 2": "bbb",
-        "question 3": "ccc"
-}]
-hit_ids = interface.launch_task(data, template='human_filter.html', title='Human Filter', reward=0, tasks_per_hit=2)
+hit_ids = interface.launch_task(data, t_type, template='human_filter.html', title='Human Filter Test1', reward=0, tasks_per_hit=10)
 print(hit_ids)
 
 # Use the code below to fetch the complete hit.
