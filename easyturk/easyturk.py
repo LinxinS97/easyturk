@@ -92,13 +92,6 @@ class EasyTurk(object):
                                   'IntegerValues': [hits_approved]
                               },
                               {
-                                  'QualificationTypeId': '00000000000000000071',
-                                  'Comparator': 'EqualTo',
-                                  'LocaleValues': [
-                                       {'Country': country},
-                                  ],
-                              },
-                              {
                                   'QualificationTypeId': '000000000000000000L0',
                                   'Comparator': 'GreaterThanOrEqualTo',
                                   'IntegerValues': [percent_approved],
@@ -154,9 +147,10 @@ class EasyTurk(object):
         """
         status = ['Approved', 'Submitted', 'Rejected']
         try:
-            assignments = self.mtc.list_assignments_for_hit(
-                    HITId=hit_id, AssignmentStatuses=status)
-        except Exception:
+            assignments = self.mtc.list_assignments_for_hit(HITId=hit_id, AssignmentStatuses=status)
+            # assignments = self.mtc.list_assignments_for_hit(AssignmentStatuses=status)
+        except Exception as e:
+            print(e)
             return []
         results = []
         for a in assignments['Assignments']:
@@ -195,7 +189,7 @@ class EasyTurk(object):
                 self.mtc.delete_hit(HITId=hit_id)
                 return True
             except Exception as e:
-                print e
+                print(e)
                 return False
 
     def approve_hit(self, hit_id, reject_on_fail=False,

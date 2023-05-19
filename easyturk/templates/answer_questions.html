@@ -49,51 +49,31 @@
   </style>
 </head>
 <body>
-<div class='container instructions-container'>
-  <div id='instructions-section'>
-    <div class='instructions'>
-      <div class='row'>
-        <div class='col-md-12'>
-          <h1>Instructions</h1>
-        </div>
-      </div>
-      <div class='row'>
-        <div class='col-md-12'>
-          <ul>
-            <li>Write captions for pictures.</li>
-            <li>In this task, you will be shown a picture and your task is to write a grammatically correct sentence describing the <b>contents of the picture</b></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class='container tasks-container'>
   <div class='container'>
-    <h2>Here are the pictures we would like you to write captions for:</h2>
+    <h2 id="task-instruction">TASK instruction</h2>
   </div>
 
   <div class='container-fluid'>
     <div class='row'>
       <div class='col-12'>
-        <div id='image-container'>
-        </div>
+        <div id='image-container'></div>
       </div>
     </div>
-    <br />
-    <br />
-    <div class='row justify-content-center'>
-      <div class='col-6'>
-        <h2>Write a caption describing the contents of the image:</h2>
-        <textarea type="text" name="caption" id='caption' rows="3" cols='50'></textarea>
-      </div>
+
+    <br/>
+
+    
+    <span id="modified">Please select one caption that faithfully describes the image</span>:</span>
+    <div class='row justify-content-left'>
+      <div class='col-6 questions'></div>
     </div>
     <div class='row justify-content-center' style='margin-top: 10px; padding-bottom: 10px;'>
       <div class='col-1'>
         <button id='prev-btn' class='btn btn-lg btn-primary' disabled>Back</button>
       </div>
-      <div class='col-2'>
+      <div class='col-2' style="text-align: center">
         <span id='counter'>
           <span class='counter-top'></span> / <span class='counter-bottom'></span>
         </span>
@@ -112,21 +92,24 @@
     // Define some default input.
     // It is good practice to define standard inputs for a task which will be overwritten when launching
     // your actual task. The default inputs allow you to render and debug your task locally.
-    var DEFAULT_INPUT = [{"url": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg"},
-                         {"url": "https://cs.stanford.edu/people/rak248/VG_100K/1160053.jpg"}]
+    var DEFAULT_INPUT = [{
+        "id": 1,
+        "task instruction": "task instruction",
+        "image": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
+        "captions": ["caption A", "caption B", "caption C", "caption D", "caption E"]
+    }]
 
     var input = null;
 
-    // This is where we will be collecting the captions for each image;
-    var captions = [];
+    // This is where we will be collecting the answers for each image;
+    var answers = [];
 
     // Some variables to track state of the HIT.
     var idx = 0;
     var enabled = false;
 
     function main() {
-      // If this is a HIT on AMT, then replace the default input with the real
-      // input.
+      // If this is a HIT on AMT, then replace the default input with the real input.
       input = easyturk.getInput(DEFAULT_INPUT);
 
       // Enable the task.
@@ -135,11 +118,11 @@
       }
 
       // Set up the correct.
-      _.each(input, function() { captions.push(null); });
+      _.each(input, function() { answers.push(null); });
 
       // Preload all images
       _.each(input, function(input_elem) {
-        var imgUrl = input_elem['url'];
+        var imgUrl = input_elem['image'];
         var img = new Image();
         img.onload = function() { console.log('loaded image from ' + imgUrl); };
         img.src = imgUrl;
@@ -151,11 +134,24 @@
     // Use the current index to update the image and description
     function render() {
       // Set up the image
+      $('#task-instruction').text(input[idx]['task instruction'])
       $('#image-container').empty();
-      $("<img style='width:100%; height:auto;'>").attr('src', input[idx]['url']).appendTo($('#image-container'));
+      $("<img style='width:60%; height:auto; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['image']).appendTo($('#image-container'));
+      // $("<span style='display:inline'> Image caption: </span><span>" + input[idx]['caption'] + "</span><br>").appendTo($('#image-container'));
+      // $("<span style='display:inline'> Modifications: </span><span>" + input[idx]['modification'] + "</span><br>").appendTo($('#image-container'));
+      // $("<span><strong>Machie-generated negative caption: </strong></span><span>" + input[idx]['new_caption'] + "</span><br>").appendTo($('#image-container'));
 
-      // Set up the input text field
-      $('#caption').val(captions[idx]);
+      // $('#modified').html(input[idx]['modified']);
+      // Set up the input question list
+      // $('.questions').html(`
+      //   <h3 display="inline">${input[idx]['question 1']}</h4> <input type="radio" id="q1_ans_t" name="q1" value="1"> <label for="q1_ans_t">Yes</label> <input type="radio" id="q1_ans_f" name="q1" value="0"> <label for="q1_ans_f">No</label>
+      //   <h3 display="inline">${input[idx]['question 2']}</h4> <input type="radio" id="q2_ans_t" name="q2" value="1"> <label for="q2_ans_t">Yes</label> <input type="radio" id="q2_ans_f" name="q2" value="0"> <label for="q2_ans_f">No</label>
+      //   <h3 display="inline">${input[idx]['question 3']}</h4> <input type="radio" id="q3_ans_t" name="q3" value="1"> <label for="q3_ans_t">Yes</label> <input type="radio" id="q3_ans_f" name="q3" value="0"> <label for="q3_ans_f">No</label>
+      // `);
+      input[idx]['captions'].forEach((e, i) => {
+        $(`<input type="radio" name="captions" value="${i}"><h5 style="display:inline;margin-left:10px">${e}</h5><br>`
+        ).appendTo($('.questions'));
+      })
 
       // Refresh the counter
       $('.counter-top').text(idx + 1);
@@ -183,14 +179,15 @@
     }
 
     function saveCaption() {
-      var c = $('#caption').val();
-      var lc = c.toLowerCase();
-      var numWords = lc.split(' ').length;
-      if (numWords < 5) {
-          alert('Your caption is too short. Please try to come up with a more specific caption.');
-          return false;
+      let caption_ans = $('input:radio[name="captions"]:checked').val();
+      // let q2_ans = $('input:radio[name="q2"]:checked').val();
+      // let q3_ans = $('input:radio[name="q3"]:checked').val();
+      res = caption_ans
+      if (res === undefined) {
+        alert("Please answer all questions before moving on.");
+        return false;
       }
-      captions[idx] = c;
+      answers[idx] = res;
       return true;
     }
 
@@ -203,11 +200,21 @@
       $('#next-btn').click(function() {
           if (saveCaption()) {
               setIdx(idx + 1);
+              if (answers[idx] !== undefined) {
+                $('input:radio[name="captions"][value="' + answers[idx] + '"]').prop('checked', true);
+                // $('input:radio[name="q2"][value="' + answers[idx][1] + '"]').prop('checked', true);
+                // $('input:radio[name="q3"][value="' + answers[idx][2] + '"]').prop('checked', true);
+              }
           }
       });
       $('#prev-btn').click(function() {
           if (saveCaption()) {
               setIdx(idx - 1);
+              if (answers[idx] !== undefined) {
+                $('input:radio[name="captions"][value="' + answers[idx] + '"]').prop('checked', true);
+                // $('input:radio[name="q2"][value="' + answers[idx][1] + '"]').prop('checked', true);
+                // $('input:radio[name="q3"][value="' + answers[idx][2] + '"]').prop('checked', true);
+              }
           }
       });
       $('#submit-btn').prop('disabled', false);
@@ -217,17 +224,11 @@
         if (!saveCaption()) {
           return false;
         }
-        for (var i = 0; i < input.length; i++) {
-          if (captions[i] == null || captions[i].length == 0) {
-            alert('You did not write a caption for #' + (i+1));
-            return false;
-          }
-        }
 
         // Copy the url and captions to the output we will return to the requester.
         var output = input;
         for (var i = 0; i < output.length; i++) {
-          output[i]['caption'] = captions[i];
+          output[i]['answers'] = answers[i];
         }
         if (easyturk.isPreview()) {
           alert("This is only a preview. Here is your output: \n" + JSON.stringify(output));
