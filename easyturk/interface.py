@@ -88,7 +88,7 @@ def launch_verify_bbox(data, reward=1.00, tasks_per_hit=30, sandbox=False):
     return hit_ids
 
 
-def launch_task(data, t_type, template, title, reward=1.00, tasks_per_hit=10, sandbox=True):
+def launch_task(data, template, title, reward=1.00, tasks_per_hit=10, sandbox=True):
     """Launches HITs to ask workers to caption images.
 
     Args:
