@@ -88,7 +88,7 @@ def launch_verify_bbox(data, reward=1.00, tasks_per_hit=30, sandbox=False):
     return hit_ids
 
 
-def launch_caption(data, reward=1.00, tasks_per_hit=10, sandbox=True):
+def launch_task(data, template, title, reward=1.00, tasks_per_hit=10, sandbox=True):
     """Launches HITs to ask workers to caption images.
 
     Args:
@@ -101,13 +101,13 @@ def launch_caption(data, reward=1.00, tasks_per_hit=10, sandbox=True):
         A list of hit ids that have been launched.
     """
     et = EasyTurk(sandbox=sandbox)
-    template = 'answer_questions.html'
     hit_ids = []
     i = 0
     while i < len(data):
         hit = et.launch_hit(
-            template, data[i:i+tasks_per_hit], reward=reward,
-            title='Question answering',
+            template, data[i:i+tasks_per_hit], 
+            reward=reward,
+            title=title,
             description=('Write captions about the contents of images.'),
             keywords='image, caption, text')
         hit_id = hit['HIT']['HITId']

@@ -65,7 +65,7 @@
     <br/>
 
     
-    <span id="modified">Please select one caption that faithfully describes the image</span>:</span>
+    <span id="modified">Please select one caption that faithfully describes the image:</span>
     <div class='row justify-content-left'>
       <div class='col-6 questions'></div>
     </div>
@@ -93,10 +93,10 @@
     // It is good practice to define standard inputs for a task which will be overwritten when launching
     // your actual task. The default inputs allow you to render and debug your task locally.
     var DEFAULT_INPUT = [{
-        "id": 1,
-        "task instruction": "task instruction",
-        "image": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
-        "captions": ["caption A", "caption B", "caption C", "caption D", "caption E"]
+      "id": 1,
+      "task instruction": "task instruction",
+      "image": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
+      "captions": ["caption A", "caption B", "caption C", "caption D", "caption E"]
     }]
 
     var input = null;
@@ -137,17 +137,7 @@
       $('#task-instruction').text(input[idx]['task instruction'])
       $('#image-container').empty();
       $("<img style='width:60%; height:auto; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['image']).appendTo($('#image-container'));
-      // $("<span style='display:inline'> Image caption: </span><span>" + input[idx]['caption'] + "</span><br>").appendTo($('#image-container'));
-      // $("<span style='display:inline'> Modifications: </span><span>" + input[idx]['modification'] + "</span><br>").appendTo($('#image-container'));
-      // $("<span><strong>Machie-generated negative caption: </strong></span><span>" + input[idx]['new_caption'] + "</span><br>").appendTo($('#image-container'));
-
-      // $('#modified').html(input[idx]['modified']);
-      // Set up the input question list
-      // $('.questions').html(`
-      //   <h3 display="inline">${input[idx]['question 1']}</h4> <input type="radio" id="q1_ans_t" name="q1" value="1"> <label for="q1_ans_t">Yes</label> <input type="radio" id="q1_ans_f" name="q1" value="0"> <label for="q1_ans_f">No</label>
-      //   <h3 display="inline">${input[idx]['question 2']}</h4> <input type="radio" id="q2_ans_t" name="q2" value="1"> <label for="q2_ans_t">Yes</label> <input type="radio" id="q2_ans_f" name="q2" value="0"> <label for="q2_ans_f">No</label>
-      //   <h3 display="inline">${input[idx]['question 3']}</h4> <input type="radio" id="q3_ans_t" name="q3" value="1"> <label for="q3_ans_t">Yes</label> <input type="radio" id="q3_ans_f" name="q3" value="0"> <label for="q3_ans_f">No</label>
-      // `);
+      $('.questions').html('')
       input[idx]['captions'].forEach((e, i) => {
         $(`<input type="radio" name="captions" value="${i}"><h5 style="display:inline;margin-left:10px">${e}</h5><br>`
         ).appendTo($('.questions'));
@@ -157,8 +147,7 @@
       $('.counter-top').text(idx + 1);
       $('.counter-bottom').text(input.length);
 
-      // If the UI is enabled, enable or disable the buttons depending on
-      // the index.
+      // If the UI is enabled, enable or disable the buttons depending on the index.
       if (enabled) {
         $('#prev-btn').prop('disabled', false);
         $('#next-btn').prop('disabled', false);
@@ -180,8 +169,6 @@
 
     function saveCaption() {
       let caption_ans = $('input:radio[name="captions"]:checked').val();
-      // let q2_ans = $('input:radio[name="q2"]:checked').val();
-      // let q3_ans = $('input:radio[name="q3"]:checked').val();
       res = caption_ans
       if (res === undefined) {
         alert("Please answer all questions before moving on.");
@@ -202,8 +189,6 @@
               setIdx(idx + 1);
               if (answers[idx] !== undefined) {
                 $('input:radio[name="captions"][value="' + answers[idx] + '"]').prop('checked', true);
-                // $('input:radio[name="q2"][value="' + answers[idx][1] + '"]').prop('checked', true);
-                // $('input:radio[name="q3"][value="' + answers[idx][2] + '"]').prop('checked', true);
               }
           }
       });
@@ -212,8 +197,6 @@
               setIdx(idx - 1);
               if (answers[idx] !== undefined) {
                 $('input:radio[name="captions"][value="' + answers[idx] + '"]').prop('checked', true);
-                // $('input:radio[name="q2"][value="' + answers[idx][1] + '"]').prop('checked', true);
-                // $('input:radio[name="q3"][value="' + answers[idx][2] + '"]').prop('checked', true);
               }
           }
       });
