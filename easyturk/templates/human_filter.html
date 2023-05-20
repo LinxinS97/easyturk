@@ -59,6 +59,7 @@
 
 <div class='container tasks-container'>
   <div class='container head-container'>
+    <h3>Instruction</h3>
     <h4 id="task-instruction">
       <ul></ul>
     </h4>
@@ -105,7 +106,8 @@
       "val_id": 0,
       "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
                            Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
-                           You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.`,
+                           You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.
+                           `,
       "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
       "caption": "caption",
       "hn_text": "new_caption",
@@ -150,8 +152,9 @@
     // Use the current index to update the image and description
     function render() {
       // Set up the image
-      input[idx]['task instruction'].split('\n').forEach(function(item) {
-          $(`<li>${item}</li>`).appendTo('#task-instruction ul');
+      input[idx]['task instruction'].split('\n').forEach((item, i) => {
+        if (item.trim().length === 0) return;
+        $(`<li>${item}</li>`).appendTo('#task-instruction ul')
       })
       $('#image-container').empty();
       $("<img style='width:60%; height:auto; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['filepath']).appendTo($('#image-container'));
