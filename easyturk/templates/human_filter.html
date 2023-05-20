@@ -152,6 +152,7 @@
     // Use the current index to update the image and description
     function render() {
       // Set up the image
+      $('#task-instruction ul').empty();
       input[idx]['task instruction'].split('\n').forEach((item, i) => {
         if (item.trim().length === 0) return;
         $(`<li>${item}</li>`).appendTo('#task-instruction ul')
