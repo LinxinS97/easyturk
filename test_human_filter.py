@@ -41,6 +41,7 @@ question_map = {
 
 
 t_type = 'type1'
+file_name = 'human_filter_test6.json'
 data = []
 
 with open('dataset/chatgpt_swap_att_cos_filtered.jsonl', 'r', encoding='utf-8') as f:
@@ -55,8 +56,10 @@ for json_str in json_list:
     data.append(tmp)
 
 
-hit_ids = interface.launch_task(data, template='human_filter.html', title='Human Filter Test 4', reward=0, tasks_per_hit=10)
+hit_ids = interface.launch_task(data[:20], template='human_filter.html', title='Human Filter Test 6', reward=0, tasks_per_hit=10)
 print(hit_ids)
+with open(f'./hitid/{file_name}', 'w') as f:
+    json.dump(hit_ids, f)
 
 # Use the code below to fetch the complete hit.
 # results = interface.fetch_completed_hits(hit_ids, approve=False)
