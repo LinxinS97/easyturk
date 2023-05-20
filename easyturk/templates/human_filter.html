@@ -10,6 +10,9 @@
   <!-- end of required libraries -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js'></script>
   <style>
+    hr {
+      border-top: 3px solid rgba(0,0,0);
+    }
     #counter {
       margin: 0 10px;
       font-size: 20pt;
@@ -22,9 +25,13 @@
       height: 200px;
     }
     .tasks-container {
+      max-width: 70%;
       margin-top: 15px;
       margin-bottom: 30px;
       background-color: #DBDBDB;
+    }
+    .head-container {
+      max-width: 100%;
     }
     .examples-container {
       margin-top: 15px;
@@ -51,23 +58,25 @@
 <body>
 
 <div class='container tasks-container'>
-  <div class='container'>
-    <h2 id="task-instruction">TASK instruction</h2>
+  <div class='container head-container'>
+    <h4 id="task-instruction">
+      <ul></ul>
+    </h4>
   </div>
-
+  <hr/>
   <div class='container-fluid'>
     <div class='row'>
       <div class='col-12'>
         <div id='image-container'></div>
       </div>
     </div>
-
+    <hr/>
     <br/>
 
     
     <span>Please answer the following question regarding the<span style="color:red"> machine-generated negative caption</span>:</span>
-    <div class='row justify-content-left'>
-      <div class='col-6 questions'></div>
+    <div class='justify-content-center' style="width:100%;">
+      <div class='questions'></div>
     </div>
     <div class='row justify-content-center' style='margin-top: 10px; padding-bottom: 10px;'>
       <div class='col-1'>
@@ -94,14 +103,16 @@
     // your actual task. The default inputs allow you to render and debug your task locally.
     var DEFAULT_INPUT = [{
       "val_id": 0,
-      "task instruction": "task instruction",
+      "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
+                           Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
+                           You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.`,
       "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
       "caption": "caption",
       "hn_text": "new_caption",
       "modified": "what is modified from caption to new_caption",
-      "question 1": "q1",
-      "question 2": "q2",
-      "question 3": "q3"
+      "question 1": "Does the machine-generated caption make logical sense and follow commonsense?",
+      "question 2": "Is the machine-generated caption a negative caption? A negative caption should NOT describe the presented image.",
+      "question 3": "Does the machine-generated caption differ from the true caption only by attribute swapping?"
     }]
 
     var input = null;
@@ -139,18 +150,22 @@
     // Use the current index to update the image and description
     function render() {
       // Set up the image
-      $('#task-instruction').text(input[idx]['task instruction'])
+      input[idx]['task instruction'].split('\n').forEach(function(item) {
+          $(`<li>${item}</li>`).appendTo('#task-instruction ul');
+      })
       $('#image-container').empty();
-      $("<img style='height:300px; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['filepath']).appendTo($('#image-container'));
-      $("<span style='display:inline'> True image caption: </span><span>" + input[idx]['caption'] + "</span><br>").appendTo($('#image-container'));
-      $("<span style='display:inline'> Modifications: </span><span>" + input[idx]['modified'] + "</span><br>").appendTo($('#image-container'));
+      $("<img style='width:60%; height:auto; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['filepath']).appendTo($('#image-container'));
+      $("<span style='display:inline'> <strong>True image caption: </strong></span><span>" + input[idx]['caption'] + "</span><br>").appendTo($('#image-container'));
+      $("<span style='display:inline'> <strong>Modifications: </strong></span><span>" + input[idx]['modified'] + "</span><br>").appendTo($('#image-container'));
       $("<span><strong>Machie-generated negative caption: </strong></span><span>" + input[idx]['hn_text'] + "</span><br>").appendTo($('#image-container'));
       
       // Set up the input question list
       $('.questions').html(`
-        <h4 display="inline">${input[idx]['question 1']}</h4> <input type="radio" id="q1_ans_t" name="q1" value="1"> <label for="q1_ans_t">Yes</label> <input type="radio" id="q1_ans_f" name="q1" value="0"> <label for="q1_ans_f">No</label>
-        <h4 display="inline">${input[idx]['question 2']}</h4> <input type="radio" id="q2_ans_t" name="q2" value="1"> <label for="q2_ans_t">Yes</label> <input type="radio" id="q2_ans_f" name="q2" value="0"> <label for="q2_ans_f">No</label>
-        <h4 display="inline">${input[idx]['question 3']}</h4> <input type="radio" id="q3_ans_t" name="q3" value="1"> <label for="q3_ans_t">Yes</label> <input type="radio" id="q3_ans_f" name="q3" value="0"> <label for="q3_ans_f">No</label>
+        <ul>
+          <li><h4 display="inline">${input[idx]['question 1']}</h4> <input type="radio" id="q1_ans_t" name="q1" value="1"> <label for="q1_ans_t">Yes</label> <input type="radio" id="q1_ans_f" name="q1" value="0"> <label for="q1_ans_f">No</label></li>
+          <li><h4 display="inline">${input[idx]['question 2']}</h4> <input type="radio" id="q2_ans_t" name="q2" value="1"> <label for="q2_ans_t">Yes</label> <input type="radio" id="q2_ans_f" name="q2" value="0"> <label for="q2_ans_f">No</label></li>
+          <li><h4 display="inline">${input[idx]['question 3']}</h4> <input type="radio" id="q3_ans_t" name="q3" value="1"> <label for="q3_ans_t">Yes</label> <input type="radio" id="q3_ans_f" name="q3" value="0"> <label for="q3_ans_f">No</label></li>
+        </ul>
       `);
 
       // Refresh the counter
