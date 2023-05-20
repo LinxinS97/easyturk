@@ -25,18 +25,34 @@
       height: 200px;
     }
     .tasks-container {
+      font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
       max-width: 70%;
       margin-top: 15px;
       margin-bottom: 30px;
+      padding-top: 5px;
       background-color: #DBDBDB;
     }
     .head-container {
       max-width: 100%;
+      background-color: bisque;
+      padding: 5px;
+      margin-top: 5px;
+      box-shadow: 5px 5px 10px rgb(86, 86, 86);
     }
-    .examples-container {
+    #image-container {
+      max-width: 100%;
+      background-color: #F0EAD6;
+      padding: 5px;
+      margin-top: 5px;
+      box-shadow: 5px 5px 10px rgb(86, 86, 86);
+    }
+    #image-container img {
+      box-shadow: 5px 5px 10px rgb(86, 86, 86);
+    }
+    .question-container {
       margin-top: 15px;
       margin-bottom: 30px;
-      background-color: #9fbccb;
+      padding: 5px;
     }
     .instructions-container {
       margin-top: 15px;
@@ -60,27 +76,25 @@
 <div class='container tasks-container'>
   <div class='container head-container'>
     <h3>Instruction</h3>
-    <h4 id="task-instruction">
+    <h5 id="task-instruction">
       <ul></ul>
-    </h4>
+    </h5>
   </div>
   <hr/>
-  <div class='container-fluid'>
+  <div>
     <div class='row'>
       <div class='col-12'>
         <div id='image-container'></div>
       </div>
     </div>
     <hr/>
-    <br/>
-
     
-    <span>Please answer the following question regarding the<span style="color:red"> machine-generated negative caption</span>:</span>
-    <div class='justify-content-center' style="width:100%;">
+    <div class='justify-content-center question-container' style="width:100%;">
+      <span>Please answer the following question regarding the<span style="color:red"> edited caption</span>:</span>
       <div class='questions'></div>
     </div>
     <div class='row justify-content-center' style='margin-top: 10px; padding-bottom: 10px;'>
-      <div class='col-1'>
+      <div>
         <button id='prev-btn' class='btn btn-lg btn-primary' disabled>Back</button>
       </div>
       <div class='col-2' style="text-align: center">
@@ -88,7 +102,7 @@
           <span class='counter-top'></span> / <span class='counter-bottom'></span>
         </span>
       </div>
-      <div class='col-1'>
+      <div>
         <button id='next-btn' class='btn btn-lg btn-primary' disabled>Next</button>
       </div>
     </div>
@@ -114,7 +128,11 @@
       "modified": "what is modified from caption to new_caption",
       "question 1": "Does the machine-generated caption make logical sense and follow commonsense?",
       "question 2": "Is the machine-generated caption a negative caption? A negative caption should NOT describe the presented image.",
-      "question 3": "Does the machine-generated caption differ from the true caption only by attribute swapping?"
+      "question 3": "Does the machine-generated caption differ from the true caption only by attribute swapping?",
+      "question 2 example": [
+          ['True', 'A man is in a kitchen making pizzas.', 'man -> robot', 'A robot is in a kitchen making pizzas.'],
+          ['False', 'A blue bike parked on a side walk.', 'blue -> yellow', 'A yellow bike parked on a side walk.'],
+      ]
     }]
 
     var input = null;
@@ -159,18 +177,49 @@
       })
       $('#image-container').empty();
       $("<img style='width:60%; height:auto; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['filepath']).appendTo($('#image-container'));
-      $("<span style='display:inline'> <strong>True image caption: </strong></span><span>" + input[idx]['caption'] + "</span><br>").appendTo($('#image-container'));
+      $("<span style='display:inline'> <strong>True caption: </strong></span><span>" + input[idx]['caption'] + "</span><br>").appendTo($('#image-container'));
       $("<span style='display:inline'> <strong>Modifications: </strong></span><span>" + input[idx]['modified'] + "</span><br>").appendTo($('#image-container'));
-      $("<span><strong>Machie-generated negative caption: </strong></span><span>" + input[idx]['hn_text'] + "</span><br>").appendTo($('#image-container'));
+      $("<span><strong>Edited caption: </strong></span><span>" + input[idx]['hn_text'] + "</span><br>").appendTo($('#image-container'));
       
       // Set up the input question list
       $('.questions').html(`
         <ul>
-          <li><h4 display="inline">${input[idx]['question 1']}</h4> <input type="radio" id="q1_ans_t" name="q1" value="1"> <label for="q1_ans_t">Yes</label> <input type="radio" id="q1_ans_f" name="q1" value="0"> <label for="q1_ans_f">No</label></li>
-          <li><h4 display="inline">${input[idx]['question 2']}</h4> <input type="radio" id="q2_ans_t" name="q2" value="1"> <label for="q2_ans_t">Yes</label> <input type="radio" id="q2_ans_f" name="q2" value="0"> <label for="q2_ans_f">No</label></li>
-          <li><h4 display="inline">${input[idx]['question 3']}</h4> <input type="radio" id="q3_ans_t" name="q3" value="1"> <label for="q3_ans_t">Yes</label> <input type="radio" id="q3_ans_f" name="q3" value="0"> <label for="q3_ans_f">No</label></li>
+          <li><h4 display="inline">${input[idx]['question 1']}</h4> 
+            <input type="radio" id="q1_ans_t" name="q1" value="1"> <label for="q1_ans_t" style="margin-right:15px">True</label> 
+            <input type="radio" id="q1_ans_f" name="q1" value="0"> <label for="q1_ans_f">False</label></li>
+          <li id="q2"><h4 display="inline">${input[idx]['question 2']}</h4> 
+            <input type="radio" id="q2_ans_t" name="q2" value="1"> <label for="q2_ans_t" style="margin-right:15px">True</label> 
+            <input type="radio" id="q2_ans_f" name="q2" value="0"> <label for="q2_ans_f">False</label></li>
+          <li><h4 display="inline">${input[idx]['question 3']}</h4> 
+            <input type="radio" id="q3_ans_t" name="q3" value="1"> <label for="q3_ans_t" style="margin-right:15px">True</label> 
+            <input type="radio" id="q3_ans_f" name="q3" value="0"> <label for="q3_ans_f">False</label></li>
         </ul>
       `);
+
+      let $table = $(`<table class="table table-sm table-success table-striped"></table>`)
+      $table.append($(`
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Answer</td>
+            <th scope="col">Caption</td>
+            <th scope="col">Modification</td>
+            <th scope="col">Edited Caption</td>
+          </tr>
+        </thead>`)
+      );
+
+      input[idx]['question 2 example'].forEach(item => {
+        $(`
+        <tr>
+          <td scope="col">${item[0]}</td>
+          <td scope="col">${item[1]}</td>
+          <td scope="col">${item[2]}</td>
+          <td scope="col">${item[3]}</td>
+        </tr>
+      `).appendTo($table)})
+
+      $table.insertAfter('#q2 h4');
+
 
       // Refresh the counter
       $('.counter-top').text(idx + 1);
