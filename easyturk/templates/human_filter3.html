@@ -125,6 +125,15 @@
       "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
       "hn_text": "A person on a skateboard and bike at a skate park.",
       "question": "Does the machine-generated caption differ from the true caption only by attribute swapping?"
+    },{
+      "val_id": 0,
+      "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
+                           Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
+                           You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.
+                           `,
+      "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
+      "hn_text": "A person on a skateboard and bike at a skate park.",
+      "question": "Does the machine-generated caption differ from the true caption only by attribute swapping?"
     }]
 
     var input = null;
@@ -230,7 +239,7 @@
           if (saveCaption()) {
               setIdx(idx + 1);
               if (answers[idx] !== undefined) {
-                $('input:radio[name="q3"][value="' + answers[idx][2] + '"]').prop('checked', true);
+                $('input:radio[name="q3"][value="' + answers[idx] + '"]').prop('checked', true);
               }
           }
       });
@@ -238,7 +247,7 @@
           if (saveCaption()) {
               setIdx(idx - 1);
               if (answers[idx] !== undefined) {
-                $('input:radio[name="q3"][value="' + answers[idx][2] + '"]').prop('checked', true);
+                $('input:radio[name="q3"][value="' + answers[idx] + '"]').prop('checked', true);
               }
           }
       });
@@ -248,6 +257,10 @@
         // Make sure to save the last one.
         if (!saveCaption()) {
           return false;
+        }
+        if (answers.findIndex(e => e === null) !== -1) {
+          alert("Please answer all questions before submitting.")
+          return false
         }
         // Copy the url and captions to the output we will return to the requester.
         var output = input;

@@ -203,20 +203,20 @@
 
     // Update the index, and save the text in the text area.
     function setIdx(newIdx) {
-      if (newIdx < 0 || newIdx >= input.length) return;
-      idx = newIdx;
-      render();
+      if (newIdx < 0 || newIdx >= input.length) return
+      idx = newIdx
+      render()
     }
 
     function saveCaption() {
       let q1_ans = $('input:radio[name="q1"]:checked').val()
       res = q1_ans
       if (res === undefined) {
-        alert("Please answer all questions before moving on.");
-        return false;
+        alert("Please answer the question before moving on.")
+        return false
       }
-      answers[idx] = res;
-      return true;
+      answers[idx] = res
+      return true
     }
 
     // Enable the UI.
@@ -229,7 +229,7 @@
           if (saveCaption()) {
               setIdx(idx + 1);
               if (answers[idx] !== undefined) {
-                $('input:radio[name="q1"][value="' + answers[idx][0] + '"]').prop('checked', true);
+                $('input:radio[name="q1"][value="' + answers[idx] + '"]').prop('checked', true);
               }
           }
       });
@@ -237,7 +237,7 @@
           if (saveCaption()) {
               setIdx(idx - 1);
               if (answers[idx] !== undefined) {
-                $('input:radio[name="q1"][value="' + answers[idx][0] + '"]').prop('checked', true);
+                $('input:radio[name="q1"][value="' + answers[idx] + '"]').prop('checked', true);
               }
           }
       });
@@ -247,6 +247,10 @@
         // Make sure to save the last one.
         if (!saveCaption()) {
           return false;
+        }
+        if (answers.findIndex(e => e === null) !== -1) {
+          alert("Please answer all questions before submitting.")
+          return false
         }
         // Copy the url and captions to the output we will return to the requester.
         var output = input;
