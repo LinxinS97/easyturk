@@ -83,191 +83,211 @@
       <ul></ul>
     </h5>
   </div>
-  <div>
-    <div class='row'>
-      <div class='col-12'>
-        <div id='image-container'></div>
-      </div>
-    </div>
-    <hr/>
-    
-    <div class='justify-content-center question-container' style="width:100%;">
-      <!-- <span>Please answer the following question regarding the<span style="color:red"> edited caption</span>:</span> -->
-      <div class='questions'></div>
-    </div>
-    <div class='row justify-content-center' style='margin-top: 10px; padding-bottom: 10px;'>
-      
-      <button id='prev-btn' class='btn btn-lg btn-primary' disabled>Back</button>
-      <div class='col-2' style="text-align: center">
-        <span id='counter'>
-          <span class='counter-top'></span> / <span class='counter-bottom'></span>
-        </span>
-      </div>
-      <button id='next-btn' class='btn btn-lg btn-primary' disabled>Next</button>
-      
-    </div>
-  </div>
+  <hr/>
+  <br/>
 </div>
 
 <!--IMPORTANT: This import contains all the functions you need to read in your input data and send back worker outputs.-->  
 {% include "easyturk.html" %}
 
-  <script>
-    // Define some default input.
-    // It is good practice to define standard inputs for a task which will be overwritten when launching
-    // your actual task. The default inputs allow you to render and debug your task locally.
-    var DEFAULT_INPUT = [{
-      "val_id": 0,
-      "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
-                           Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
-                           You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.
-                           `,
-      "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
-      "hn_text": "new_caption",
-      "question": "Does the machine-generated caption make logical sense and follow commonsense?",
-    }]
+<script>
+  // Define some default input.
+  // It is good practice to define standard inputs for a task which will be overwritten when launching
+  // your actual task. The default inputs allow you to render and debug your task locally.
+  var DEFAULT_INPUT = [{
+    "val_id": 0,
+    "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
+                         Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
+                         You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.
+                         `,
+    "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
+    "caption": "caption",
+    "hn_text": "new_caption",
+    "modified": "what is modified from caption to new_caption",
+    "question": "Is the machine-generated caption a negative caption? A negative caption should NOT describe the presented image.",
+    "question example": [
+        ['True', 'A man is in a kitchen making pizzas.', 'aaa'],
+        ['False', 'A blue bike parked on a side walk.', 'aaa'],
+    ]
+  },{
+    "val_id": 0,
+    "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
+                         Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
+                         You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.
+                         `,
+    "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
+    "caption": "caption",
+    "hn_text": "new_caption",
+    "modified": "what is modified from caption to new_caption",
+    "question": "Is the machine-generated caption a negative caption? A negative caption should NOT describe the presented image.",
+    "question example": [
+        ['True', 'A man is in a kitchen making pizzas.', 'aaa'],
+        ['False', 'A blue bike parked on a side walk.', 'aaa'],
+    ]
+  },{
+    "val_id": 0,
+    "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
+                         Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
+                         You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.
+                         `,
+    "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
+    "caption": "caption",
+    "hn_text": "new_caption",
+    "modified": "what is modified from caption to new_caption",
+    "question": "Is the machine-generated caption a negative caption? A negative caption should NOT describe the presented image.",
+    "question example": [
+        ['True', 'A man is in a kitchen making pizzas.', 'aaa'],
+        ['False', 'A blue bike parked on a side walk.', 'aaa'],
+    ]
+  },{
+    "val_id": 0,
+    "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
+                         Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
+                         You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.
+                         `,
+    "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
+    "caption": "caption",
+    "hn_text": "new_caption",
+    "modified": "what is modified from caption to new_caption",
+    "question": "Is the machine-generated caption a negative caption? A negative caption should NOT describe the presented image.",
+    "question example": [
+        ['True', 'A man is in a kitchen making pizzas.', 'aaa'],
+        ['False', 'A blue bike parked on a side walk.', 'aaa'],
+    ]
+  }]
 
-    var input = null;
+  var input = null;
 
-    // This is where we will be collecting the answers for each image;
-    var answers = [];
+  // This is where we will be collecting the answers for each image;
+  var answers = [];
 
-    // Some variables to track state of the HIT.
-    var idx = 0;
-    var enabled = false;
+  // Some variables to track state of the HIT.
+  var idx = 0;
+  var enabled = false;
 
-    function main() {
-      // If this is a HIT on AMT, then replace the default input with the real input.
-      input = easyturk.getInput(DEFAULT_INPUT);
+  function main() {
+    // If this is a HIT on AMT, then replace the default input with the real input.
+    inputs = easyturk.getInput(DEFAULT_INPUT);
 
-      // Enable the task.
-      if (!easyturk.isPreview()){
-        enableTask();
+    // Enable the task.
+    if (!easyturk.isPreview()){
+      enableTask();
+    }
+
+    // Set up the correct.
+    _.each(inputs, function() { answers.push(null); });
+
+    let $table = $(`<table class="table table-sm table-info table-striped" style="margin-bottom: 0"></table>`)
+    $table.insertAfter('#task-instruction')
+    $table.append($(`
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Answer</th>
+          <th scope="col">Text</th>
+          <th scope="col">Explanation</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      `)
+    );
+    let $tbody = $('table tbody')
+
+    inputs[0]['question example'].forEach(item => {
+      $(`
+      <tr class="table-success">
+        <td scope="col">${item[0]}</td>
+        <td scope="col">${item[1]}</td>
+        <td scope="col">${item[2]}</td>
+      </tr>
+    `).appendTo($tbody)
+    })
+    inputs.forEach((item, i) => {
+      render(item, i);
+    })
+  }
+
+  // Use the current index to update the image and description
+  function render(input, idx) {
+    // Set up the image
+    $('#task-instruction ul').empty();
+    input['task instruction'].split('\n').forEach((item, i) => {
+      if (item.trim().length === 0) return;
+      $(`<li>${item}</li>`).appendTo('#task-instruction ul')
+    })
+    let $img_question_container = $('<div class="image-question-container"></div>');
+    let $img_container = $('<div id="image-container"></div>');
+
+    $("<span style='display:inline'> <strong>Text: </strong></span><span>" + input['caption'] + "</span><br>").appendTo($img_container);
+    
+    $img_container.appendTo($img_question_container);
+    $('<hr/>').appendTo($img_question_container);
+    
+    $question_container = $('<div class="justify-content-center question-container" style="width:100%;"></div>');
+
+    // Set up the input question list
+    $('<div class="questions"></div>').html(`
+      <h4 display="inline">${input['question']}</h4>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="q${idx}_ans_t" name="q${idx}" value="1">
+        <label class="form-check-label" for="q${idx}_ans_t" style="margin-right:15px">Yes</label> 
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="q${idx}_ans_f" name="q${idx}" value="0"> 
+        <label class="form-check-label" for="q${idx}_ans_f">No</label>
+      </div>
+    `).appendTo($question_container)
+    $question_container.appendTo($img_question_container);
+    $img_question_container.appendTo('.tasks-container');
+  }
+
+
+  function saveCaption() {
+    let indicator = false
+    Array(inputs.length).fill(0).map((_, i) => i).forEach(i => {
+      let q_ans = $('input:radio[name="q' + i + '"]:checked').val();
+      if (q_ans !== undefined) {
+        answers[i] = q_ans;
       }
-
-      // Set up the correct.
-      _.each(input, function() { answers.push(null); });
-
-      // Preload all images
-      _.each(input, function(input_elem) {
-        var imgUrl = input_elem['image'];
-        var img = new Image();
-        img.onload = function() { console.log('loaded image from ' + imgUrl); };
-        img.src = imgUrl;
-      });
-
-      render();
+    });
+    if (answers.findIndex(e => e === null) !== -1) {
+      alert("Please answer all questions before submitting.")
+      return false
     }
+    return true;
+  }
 
-    // Use the current index to update the image and description
-    function render() {
-      // Set up the image
-      $('#task-instruction ul').empty();
-      input[idx]['task instruction'].split('\n').forEach((item, i) => {
-        if (item.trim().length === 0) return;
-        $(`<li>${item}</li>`).appendTo('#task-instruction ul')
-      })
-      $('#image-container').empty();
-      $("<h5><strong>Text: </strong></h5><h5>" + input[idx]['hn_text'] + "</h5>").appendTo($('#image-container'));
-      
-      // Set up the input question list
-      $('.questions').html(`
-        <h4 display="inline">${input[idx]['question']}</h4>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="q1_ans_t" name="q1" value="1">
-          <label class="form-check-label" for="q1_ans_t" style="margin-right:15px">True</label> 
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="q1_ans_f" name="q1" value="0"> 
-          <label class="form-check-label" for="q1_ans_f">False</label>
-        </div>
-      `);
+  // Enable the UI.
+  function enableTask() {
+    enabled = true;
+    easyturk.setupSubmit();
 
-      // Refresh the counter
-      $('.counter-top').text(idx + 1);
-      $('.counter-bottom').text(input.length);
+    $('#submit-btn').prop('disabled', false);
 
-      // If the UI is enabled, enable or disable the buttons depending on
-      // the index.
-      if (enabled) {
-        $('#prev-btn').prop('disabled', false);
-        $('#next-btn').prop('disabled', false);
-        if (idx == 0) {
-          $('#prev-btn').prop('disabled', true);
-        }
-        if (idx == input.length - 1) {
-          $('#next-btn').prop('disabled', true);
-        }
-      }
-    }
-
-    // Update the index, and save the text in the text area.
-    function setIdx(newIdx) {
-      if (newIdx < 0 || newIdx >= input.length) return
-      idx = newIdx
-      render()
-    }
-
-    function saveCaption() {
-      let q1_ans = $('input:radio[name="q1"]:checked').val()
-      res = q1_ans
-      if (res === undefined) {
-        alert("Please answer the question before moving on.")
+    $('#submit-btn').click(function() {
+      // Make sure to save the last one.
+      if (!saveCaption()) {
         return false
       }
-      answers[idx] = res
-      return true
-    }
+      if (answers.findIndex(e => e === null) !== -1) {
+        alert("Please answer all questions before submitting.")
+        return false
+      }
+      // Copy the url and captions to the output we will return to the requester.
+      var output = inputs;
+      for (var i = 0; i < output.length; i++) {
+        output[i]['answers'] = answers[i];
+      }
+      if (easyturk.isPreview()) {
+        alert("This is only a preview. Here is your output: \n" + JSON.stringify(output));
+        return false;
+      } else {
+        easyturk.setOutput(output);
+        return true;
+      }
+    });
+  }
 
-    // Enable the UI.
-    function enableTask() {
-      enabled = true;
-      easyturk.setupSubmit();
-
-      // Enable components
-      $('#next-btn').click(function() {
-          if (saveCaption()) {
-              setIdx(idx + 1);
-              if (answers[idx] !== undefined) {
-                $('input:radio[name="q1"][value="' + answers[idx] + '"]').prop('checked', true);
-              }
-          }
-      });
-      $('#prev-btn').click(function() {
-          if (saveCaption()) {
-              setIdx(idx - 1);
-              if (answers[idx] !== undefined) {
-                $('input:radio[name="q1"][value="' + answers[idx] + '"]').prop('checked', true);
-              }
-          }
-      });
-      $('#submit-btn').prop('disabled', false);
-
-      $('#submit-btn').click(function() {
-        // Make sure to save the last one.
-        if (!saveCaption()) {
-          return false;
-        }
-        if (answers.findIndex(e => e === null) !== -1) {
-          alert("Please answer all questions before submitting.")
-          return false
-        }
-        // Copy the url and captions to the output we will return to the requester.
-        var output = input;
-        for (var i = 0; i < output.length; i++) {
-          output[i]['answers'] = answers[i];
-        }
-        if (easyturk.isPreview()) {
-          alert("This is only a preview. Here is your output: \n" + JSON.stringify(output));
-          return false;
-        } else {
-          easyturk.setOutput(output);
-          return true;
-        }
-      });
-    }
-
-    main();
-  </script>
+  main();
+</script>
 </body>
 </html>
