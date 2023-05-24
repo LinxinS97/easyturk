@@ -106,8 +106,8 @@
     "modified": "what is modified from caption to new_caption",
     "question": "Is the machine-generated caption a negative caption? A negative caption should NOT describe the presented image.",
     "question example": [
-        ['True', 'A man is in a kitchen making pizzas.', 'aaa'],
-        ['False', 'A blue bike parked on a side walk.', 'aaa'],
+        ['True', 'A man is in a kitchen making pizzas.'],
+        ['False', 'A blue bike parked on a side walk.'],
     ]
   },{
     "val_id": 0,
@@ -121,8 +121,8 @@
     "modified": "what is modified from caption to new_caption",
     "question": "Is the machine-generated caption a negative caption? A negative caption should NOT describe the presented image.",
     "question example": [
-        ['True', 'A man is in a kitchen making pizzas.', 'aaa'],
-        ['False', 'A blue bike parked on a side walk.', 'aaa'],
+        ['True', 'A man is in a kitchen making pizzas.'],
+        ['False', 'A blue bike parked on a side walk.'],
     ]
   },{
     "val_id": 0,
@@ -136,8 +136,8 @@
     "modified": "what is modified from caption to new_caption",
     "question": "Is the machine-generated caption a negative caption? A negative caption should NOT describe the presented image.",
     "question example": [
-        ['True', 'A man is in a kitchen making pizzas.', 'aaa'],
-        ['False', 'A blue bike parked on a side walk.', 'aaa'],
+        ['True', 'A man is in a kitchen making pizzas.'],
+        ['False', 'A blue bike parked on a side walk.'],
     ]
   },{
     "val_id": 0,
@@ -151,8 +151,8 @@
     "modified": "what is modified from caption to new_caption",
     "question": "Is the machine-generated caption a negative caption? A negative caption should NOT describe the presented image.",
     "question example": [
-        ['True', 'A man is in a kitchen making pizzas.', 'aaa'],
-        ['False', 'A blue bike parked on a side walk.', 'aaa'],
+        ['True', 'A man is in a kitchen making pizzas.'],
+        ['False', 'A blue bike parked on a side walk.'],
     ]
   }]
 
@@ -184,7 +184,6 @@
         <tr>
           <th scope="col">Answer</th>
           <th scope="col">Text</th>
-          <th scope="col">Explanation</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -197,7 +196,6 @@
       <tr class="table-success">
         <td scope="col">${item[0]}</td>
         <td scope="col">${item[1]}</td>
-        <td scope="col">${item[2]}</td>
       </tr>
     `).appendTo($tbody)
     })
