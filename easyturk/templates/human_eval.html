@@ -4,12 +4,15 @@
   <!-- easyturk depends on these libraries -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'></script>
   <!-- end of required libraries -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js'></script>
   <style>
+    hr {
+      border-top: 3px solid rgba(0,0,0);
+    }
     #counter {
       margin: 0 10px;
       font-size: 20pt;
@@ -22,19 +25,42 @@
       height: 200px;
     }
     .tasks-container {
+      font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+      max-width: 70%;
       margin-top: 15px;
       margin-bottom: 30px;
+      padding-top: 5px;
       background-color: #DBDBDB;
     }
-    .examples-container {
+    .head-container {
+      max-width: 100%;
+      background-color: bisque;
+      padding: 5px;
+      margin-top: 5px;
+      box-shadow: 5px 5px 10px rgb(86, 86, 86);
+    }
+    #image-container {
+      max-width: 100%;
+      background-color: #F0EAD6;
+      padding: 5px;
+      margin-top: 5px;
+      box-shadow: 5px 5px 10px rgb(86, 86, 86);
+    }
+    #image-container img {
+      box-shadow: 5px 5px 10px rgb(86, 86, 86);
+    }
+    .question-container {
       margin-top: 15px;
       margin-bottom: 30px;
-      background-color: #9fbccb;
+      padding: 5px;
     }
     .instructions-container {
       margin-top: 15px;
       margin-bottom: 30px;
       background-color: #F0EAD6;
+    }
+    .btn-primary {
+      width: 10rem;
     }
     p {
       font-size: 17px;
@@ -51,36 +77,35 @@
 <body>
 
 <div class='container tasks-container'>
-  <div class='container'>
-    <h2 id="task-instruction">TASK instruction</h2>
+  <div class='container head-container'>
+    <h3>Instruction</h3>
+    <h5 id="task-instruction">
+      <ul></ul>
+    </h5>
   </div>
-
-  <div class='container-fluid'>
+  <hr/>
+  <div>
     <div class='row'>
       <div class='col-12'>
         <div id='image-container'></div>
       </div>
     </div>
-
-    <br/>
-
+    <hr/>
     
-    <span id="modified">Please select one caption that faithfully describes the image:</span>
-    <div class='row justify-content-left'>
-      <div class='col-6 questions'></div>
+    <div class='justify-content-center question-container' style="width:100%;">
+      <!-- <span>Please answer the following question regarding the<span style="color:red"> edited caption</span>:</span> -->
+      <div class='questions'></div>
     </div>
     <div class='row justify-content-center' style='margin-top: 10px; padding-bottom: 10px;'>
-      <div class='col-1'>
-        <button id='prev-btn' class='btn btn-lg btn-primary' disabled>Back</button>
-      </div>
+      
+      <button id='prev-btn' class='btn btn-lg btn-primary' disabled>Back</button>
       <div class='col-2' style="text-align: center">
         <span id='counter'>
           <span class='counter-top'></span> / <span class='counter-bottom'></span>
         </span>
       </div>
-      <div class='col-1'>
-        <button id='next-btn' class='btn btn-lg btn-primary' disabled>Next</button>
-      </div>
+      <button id='next-btn' class='btn btn-lg btn-primary' disabled>Next</button>
+      
     </div>
   </div>
 </div>
@@ -93,10 +118,27 @@
     // It is good practice to define standard inputs for a task which will be overwritten when launching
     // your actual task. The default inputs allow you to render and debug your task locally.
     var DEFAULT_INPUT = [{
-      "id": 1,
-      "task instruction": "task instruction",
-      "image": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
-      "captions": ["caption A", "caption B", "caption C", "caption D", "caption E"]
+      "val_id": 0,
+      "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
+                           Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
+                           You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.
+                           `,
+      "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
+      "hn_text": "A person on a skateboard and bike at a skate park.",
+      "question": "Does the machine-generated caption differ from the true caption only by attribute swapping?",
+      "answer1": "aaaaaa",
+      "answer2": "bbbbbb"
+    },{
+      "val_id": 0,
+      "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
+                           Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
+                           You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.
+                           `,
+      "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
+      "hn_text": "A person on a skateboard and bike at a skate park.",
+      "question": "Does the machine-generated caption differ from the true caption only by attribute swapping?",
+      "answer1": "aaaaaa",
+      "answer2": "bbbbbb"
     }]
 
     var input = null;
@@ -134,20 +176,33 @@
     // Use the current index to update the image and description
     function render() {
       // Set up the image
-      $('#task-instruction').text(input[idx]['task instruction'])
-      $('#image-container').empty();
-      $("<img style='width:60%; height:auto; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['image']).appendTo($('#image-container'));
-      $('.questions').html('')
-      input[idx]['captions'].forEach((e, i) => {
-        $(`<input type="radio" name="captions" value="${i}"><h5 style="display:inline;margin-left:10px">${e}</h5><br>`
-        ).appendTo($('.questions'));
+      $('#task-instruction ul').empty();
+      input[idx]['task instruction'].split('\n').forEach((item, i) => {
+        if (item.trim().length === 0) return;
+        $(`<li>${item}</li>`).appendTo('#task-instruction ul')
       })
+      $('#image-container').empty();
+      $("<img style='width:60%; height:auto; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['filepath']).appendTo($('#image-container'));
+      
+      // Set up the input question list
+      $('.questions').html(`
+      <h4 display="inline">${input[idx]['question']}</h4>
+        <div class="form-check form-check">
+          <input class="form-check-input" type="radio" id="q3_ans_t" name="q3" value="0">
+          <label class="form-check-label" for="q3_ans_t" style="margin-right:15px">${input[idx]['answer1']}</label> 
+        </div>
+        <div class="form-check form-check">
+          <input class="form-check-input" type="radio" id="q3_ans_f" name="q3" value="1"> 
+          <label class="form-check-label" for="q3_ans_f">${input[idx]['answer2']}</label>
+        </div>
+      `);
 
       // Refresh the counter
       $('.counter-top').text(idx + 1);
       $('.counter-bottom').text(input.length);
 
-      // If the UI is enabled, enable or disable the buttons depending on the index.
+      // If the UI is enabled, enable or disable the buttons depending on
+      // the index.
       if (enabled) {
         $('#prev-btn').prop('disabled', false);
         $('#next-btn').prop('disabled', false);
@@ -168,10 +223,10 @@
     }
 
     function saveCaption() {
-      let caption_ans = $('input:radio[name="captions"]:checked').val();
-      res = caption_ans
+      let q3_ans = $('input:radio[name="q3"]:checked').val()
+      res = q3_ans
       if (res === undefined) {
-        alert("Please answer all questions before moving on.");
+        alert("Please answer the question before moving on.");
         return false;
       }
       answers[idx] = res;
@@ -188,7 +243,7 @@
           if (saveCaption()) {
               setIdx(idx + 1);
               if (answers[idx] !== undefined) {
-                $('input:radio[name="captions"][value="' + answers[idx] + '"]').prop('checked', true);
+                $('input:radio[name="q3"][value="' + answers[idx] + '"]').prop('checked', true);
               }
           }
       });
@@ -196,7 +251,7 @@
           if (saveCaption()) {
               setIdx(idx - 1);
               if (answers[idx] !== undefined) {
-                $('input:radio[name="captions"][value="' + answers[idx] + '"]').prop('checked', true);
+                $('input:radio[name="q3"][value="' + answers[idx] + '"]').prop('checked', true);
               }
           }
       });
@@ -207,7 +262,10 @@
         if (!saveCaption()) {
           return false;
         }
-
+        if (answers.findIndex(e => e === null) !== -1) {
+          alert("Please answer all questions before submitting.")
+          return false
+        }
         // Copy the url and captions to the output we will return to the requester.
         var output = input;
         for (var i = 0; i < output.length; i++) {
