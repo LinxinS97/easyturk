@@ -115,37 +115,216 @@
     // Define some default input.
     // It is good practice to define standard inputs for a task which will be overwritten when launching
     // your actual task. The default inputs allow you to render and debug your task locally.
-    var DEFAULT_INPUT = [{
-      "val_id": 0,
-      "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
-                           Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
-                           You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.
-                           `,
-      "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
-      "questions": [
-        {
-          "question": "Does the machine-generated caption differ from the true caption only by attribute swapping?",
-          "answers": ['aaa', 'bbb', 'ccc']
-        },
-        {
-          "question": "Does the machine-generated caption differ from the true caption only by attribute swapping?",
-          "answers": ['aaa', 'bbb', 'ccc', 'ddd', 'eee']
-        }
-      ]
-    },{
-      "val_id": 1,
-      "task instruction": `You will see an image, a true caption of the image, and a machine-generated negative caption of the image modified from the true caption.
-                           Here, a negative caption is similar to the true caption but not exactly describing the presented image. The modifications are also present.
-                           You will be asked to answer three binary questions about the negative caption regarding the quality of the negative caption.
-                           `,
-      "filepath": "https://cs.stanford.edu/people/rak248/VG_100K/1160052.jpg",
-      "questions": [
-        {
-          "question": "Does the machine-generated caption differ from the true caption only by attribute swapping?",
-          "answers": ['aaa', 'bbb', 'ccc', 'ddd']
-        }
-      ]
-    }]
+    var DEFAULT_INPUT = [
+      {'add_ent': [{'val_id': 0,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A man is in a kitchen making pizzas.',
+   'modified': 'kitchen, painting',
+   'hn_text': 'A man is in a kitchen with a painting, making pizzas.'},
+  {'val_id': 1,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'Man in apron standing on front of oven with pans and bakeware',
+   'modified': 'oven, microwave',
+   'hn_text': 'A man in an apron is standing in front of a microwave with pans and bakeware.'},
+  {'val_id': 2,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A baker is working in the kitchen rolling dough.',
+   'modified': 'dough, eggplants',
+   'hn_text': 'A baker is working in the kitchen rolling eggplants and dough.'},
+  {'val_id': 3,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A person standing by a stove in a kitchen.',
+   'modified': 'stove, toaster',
+   'hn_text': 'A person standing by a toaster and stove in a kitchen.'}],
+ 'add_att': [{'val_id': 0,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A man is in a kitchen making pizzas.',
+   'modified': 'man, clumsy',
+   'hn_text': 'A clumsy man is in a kitchen making pizzas.'},
+  {'val_id': 1,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'Man in apron standing on front of oven with pans and bakeware',
+   'modified': 'bakeware, coral',
+   'hn_text': 'Man in apron standing on front of oven with pans and coral bakeware.'},
+  {'val_id': 2,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A baker is working in the kitchen rolling dough.',
+   'modified': 'kitchen, tiled',
+   'hn_text': 'A baker is working in the tiled kitchen rolling dough.'},
+  {'val_id': 3,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A person standing by a stove in a kitchen.',
+   'modified': 'person, goofy',
+   'hn_text': 'A goofy person standing by a stove in a kitchen.'}],
+ 'atomic_ent': [{'val_id': 0,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A man is in a kitchen making pizzas.',
+   'modified': 'pizzas, sushi',
+   'hn_text': 'A man is in a kitchen making sushi.'},
+  {'val_id': 1,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'Man in apron standing on front of oven with pans and bakeware',
+   'modified': 'man, woman',
+   'hn_text': 'A woman in apron standing on front of oven with pans and bakeware.'}],
+ 'atomic_att': [{'val_id': 1,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'Man in apron standing on front of oven with pans and bakeware',
+   'modified': 'apron, naked',
+   'hn_text': 'A naked man standing in front of an oven with pans and bakeware.'},
+  {'val_id': 4,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A table with pies being made and a person standing near a wall with pots and pans hanging on the wall.',
+   'modified': 'made, raw',
+   'hn_text': 'A table with raw pies being prepared and a person standing near a wall with pots and pans hanging on the wall.'}],
+ 'atomic_rel': [{'val_id': 0,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A man is in a kitchen making pizzas.',
+   'modified': 'making, cleaning up',
+   'hn_text': 'A man is in a kitchen cleaning up after making pizzas.'},
+  {'val_id': 1,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'Man in apron standing on front of oven with pans and bakeware',
+   'modified': 'with, without',
+   'hn_text': 'Man in apron standing in front of oven without pans and bakeware.'},
+  {'val_id': 2,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A baker is working in the kitchen rolling dough.',
+   'modified': 'in, outside of',
+   'hn_text': 'A baker is outside of the kitchen rolling dough.'},
+  {'val_id': 3,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A person standing by a stove in a kitchen.',
+   'modified': 'standing, sitting',
+   'hn_text': 'A person sitting by a stove in a kitchen.'},
+  {'val_id': 4,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A table with pies being made and a person standing near a wall with pots and pans hanging on the wall.',
+   'modified': 'standing near, moving away from',
+   'hn_text': 'A table with pies being made and a person moving away from a wall with pots and pans hanging on it.'}],
+ 'swap_ent': [{'val_id': 4,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A table with pies being made and a person standing near a wall with pots and pans hanging on the wall.',
+   'modified': 'a table, a person',
+   'hn_text': 'A person with pies being made and a table standing near a wall with pots and pans hanging on the wall.'}],
+ 'swap_att': [{'val_id': 1,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'Man in apron standing on front of oven with pans and bakeware',
+   'modified': 'in apron, with pans and bakeware',
+   'hn_text': 'Man with pans and bakeware standing in front of oven without apron.'},
+  {'val_id': 4,
+   'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+   'caption': 'A table with pies being made and a person standing near a wall with pots and pans hanging on the wall.',
+   'modified': 'near a wall, on the wall',
+   'hn_text': 'A table with pies being made and a person hanging pots and pans on the wall near a wall.'}],
+ 'fields': ['add_ent',
+  'add_att',
+  'atomic_ent',
+  'atomic_att',
+  'atomic_rel',
+  'swap_ent',
+  'swap_att'],
+ 'field_data': [[{'val_id': 0,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A man is in a kitchen making pizzas.',
+    'modified': 'kitchen, painting',
+    'hn_text': 'A man is in a kitchen with a painting, making pizzas.'},
+   {'val_id': 1,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'Man in apron standing on front of oven with pans and bakeware',
+    'modified': 'oven, microwave',
+    'hn_text': 'A man in an apron is standing in front of a microwave with pans and bakeware.'},
+   {'val_id': 2,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A baker is working in the kitchen rolling dough.',
+    'modified': 'dough, eggplants',
+    'hn_text': 'A baker is working in the kitchen rolling eggplants and dough.'},
+   {'val_id': 3,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A person standing by a stove in a kitchen.',
+    'modified': 'stove, toaster',
+    'hn_text': 'A person standing by a toaster and stove in a kitchen.'}],
+  [{'val_id': 0,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A man is in a kitchen making pizzas.',
+    'modified': 'man, clumsy',
+    'hn_text': 'A clumsy man is in a kitchen making pizzas.'},
+   {'val_id': 1,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'Man in apron standing on front of oven with pans and bakeware',
+    'modified': 'bakeware, coral',
+    'hn_text': 'Man in apron standing on front of oven with pans and coral bakeware.'},
+   {'val_id': 2,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A baker is working in the kitchen rolling dough.',
+    'modified': 'kitchen, tiled',
+    'hn_text': 'A baker is working in the tiled kitchen rolling dough.'},
+   {'val_id': 3,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A person standing by a stove in a kitchen.',
+    'modified': 'person, goofy',
+    'hn_text': 'A goofy person standing by a stove in a kitchen.'}],
+  [{'val_id': 0,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A man is in a kitchen making pizzas.',
+    'modified': 'pizzas, sushi',
+    'hn_text': 'A man is in a kitchen making sushi.'},
+   {'val_id': 1,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'Man in apron standing on front of oven with pans and bakeware',
+    'modified': 'man, woman',
+    'hn_text': 'A woman in apron standing on front of oven with pans and bakeware.'}],
+  [{'val_id': 1,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'Man in apron standing on front of oven with pans and bakeware',
+    'modified': 'apron, naked',
+    'hn_text': 'A naked man standing in front of an oven with pans and bakeware.'},
+   {'val_id': 4,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A table with pies being made and a person standing near a wall with pots and pans hanging on the wall.',
+    'modified': 'made, raw',
+    'hn_text': 'A table with raw pies being prepared and a person standing near a wall with pots and pans hanging on the wall.'}],
+  [{'val_id': 0,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A man is in a kitchen making pizzas.',
+    'modified': 'making, cleaning up',
+    'hn_text': 'A man is in a kitchen cleaning up after making pizzas.'},
+   {'val_id': 1,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'Man in apron standing on front of oven with pans and bakeware',
+    'modified': 'with, without',
+    'hn_text': 'Man in apron standing in front of oven without pans and bakeware.'},
+   {'val_id': 2,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A baker is working in the kitchen rolling dough.',
+    'modified': 'in, outside of',
+    'hn_text': 'A baker is outside of the kitchen rolling dough.'},
+   {'val_id': 3,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A person standing by a stove in a kitchen.',
+    'modified': 'standing, sitting',
+    'hn_text': 'A person sitting by a stove in a kitchen.'},
+   {'val_id': 4,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A table with pies being made and a person standing near a wall with pots and pans hanging on the wall.',
+    'modified': 'standing near, moving away from',
+    'hn_text': 'A table with pies being made and a person moving away from a wall with pots and pans hanging on it.'}],
+  [{'val_id': 4,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A table with pies being made and a person standing near a wall with pots and pans hanging on the wall.',
+    'modified': 'a table, a person',
+    'hn_text': 'A person with pies being made and a table standing near a wall with pots and pans hanging on the wall.'}],
+  [{'val_id': 1,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'Man in apron standing on front of oven with pans and bakeware',
+    'modified': 'in apron, with pans and bakeware',
+    'hn_text': 'Man with pans and bakeware standing in front of oven without apron.'},
+   {'val_id': 4,
+    'filepath': '/home/cydhsieh/clip_hn/datasets/mscoco_captions2017/val2017/000000397133.jpg',
+    'caption': 'A table with pies being made and a person standing near a wall with pots and pans hanging on the wall.',
+    'modified': 'near a wall, on the wall',
+    'hn_text': 'A table with pies being made and a person hanging pots and pans on the wall near a wall.'}]],
+ 'task instruction': 'Pick the high-quality negative caption for a given image! \nHigh-quality negative caption should follow the following rules:\n1. The caption should be in the category (correct HN type);\n2. The caption should be clearly true negative, try to avoid ambiguous captions (man/woman when it is hard to tell) or subjective attribute (a comfortable chair).\n',
+ 'filepath': 'https://clip-comp.s3.amazonaws.com/val2017/000000397133.jpg'}]
 
     var input = null;
 
@@ -166,7 +345,8 @@
       }
 
       // Set up the correct.
-      _.each(input, function() { answers.push(null); });
+      _.each(input, function() { 
+        answers.push(null); });
 
       // Preload all images
       _.each(input, function(input_elem) {
@@ -192,19 +372,30 @@
       $img_container.empty();
       $("<img style='width:60%; height:auto; display:block; margin: 0 auto 0 auto'>").attr('src', input[idx]['filepath']).appendTo($img_container);
       
+      let fields = input[idx]['fields']
       let $question_container = $('.question-container');
       $question_container.empty();
-      input[idx]['questions'].forEach((item, i) => {
+      fields.forEach((field, i) => {
         let $container = $(`<div class='image-container' style="margin-bottom:15px;padding:10px"></div>`)
         let $question = $(`<div class='questions'></div>`)
-        $(`<h4 display="inline">${ item['question'] }</h4>`).appendTo($question);
-        item['answers'].forEach((ans, j) => {
-          $(`<div class="form-check form-check">
+
+        $(`<h4 display="inline"><strong>${ field }</strong></h4>`).appendTo($question);
+
+        input[idx][field].forEach((ans, j) => {
+          if (j !== 0) {
+            $(`<hr>`).appendTo($question);
+          }
+          $(`
+            <div class="form-check form-check">
               <input class="form-check-input" type="checkbox" id="q${i}_${j}_ans_t" name="q${i}" value="${j}">
-              <label class="form-check-label" for="q${i}_${j}_ans_t" style="margin-right:15px">${ ans }</label> 
+              <label class="form-check-label" for="q${i}_${j}_ans_t" style="margin-right:15px">
+                <strong>Positive</strong>: ${ ans['caption'] } <br/> 
+                <strong>Negative</strong>: ${ ans['hn_text'] }
+              </label> 
             </div>
           `).appendTo($question);
         })
+
         $question.appendTo($container)
         $container.appendTo($question_container)
       })
@@ -235,20 +426,21 @@
     }
 
     function saveCaption() {
-      let res = [];
-      for (let i = 0; i < input[idx]['questions'].length; i++) {
+      let res = {}
+      let fields = input[idx]['fields']
+      for (let i = 0; i < fields.length; i++) {
         let q_ans = []
-        $(`input:checkbox[name=q${i}]:checked`).each(function(){
-          q_ans.push($(this).val());
-        });
+        let q = $(`input:checkbox[name="q${i}"]:checked`).each(function() {
+          q_ans.push($(this).val())
+        })
         if (q_ans.length === 0) {
-          res.push([-1])
+          res[fields[i]] = [-1]
           continue
         }
-        res.push(q_ans);
+        res[fields[i]] = q_ans
       }
-      answers[idx] = res;
-      return true;
+      answers[idx] = res
+      return true
     }
 
     // Enable the UI.
@@ -260,25 +452,21 @@
       $('#next-btn').click(function() {
           if (saveCaption()) {
             setIdx(idx + 1);
-            if (answers[idx] !== -1) {
-              answers[idx].forEach((item, i) => {
-                item.forEach((ans, j) => {
-                  $('input:checkbox[name="q' + i + '"][value="' + ans + '"]').prop('checked', true);
-                })
+            input[idx]['fields'].forEach((field, i) => {
+              answers[idx][field].forEach((ans, j) => {
+                $(`input:checkbox[name="q${i}"][value="${ans}"]`).prop('checked', true)
               })
-            }
+            })
           }
       });
       $('#prev-btn').click(function() {
           if (saveCaption()) {
             setIdx(idx - 1);
-            if (answers[idx] !== -1) {
-              answers[idx].forEach((item, i) => {
-                item.forEach((ans, j) => {
-                  $('input:checkbox[name="q' + i + '"][value="' + ans + '"]').prop('checked', true);
-                })
+            input[idx]['fields'].forEach((field, i) => {
+              answers[idx][field].forEach((ans, j) => {
+                $(`input:checkbox[name="q${i}"][value="${ans}"]`).prop('checked', true)
               })
-            }
+            })
           }
       });
       $('#submit-btn').prop('disabled', false);
