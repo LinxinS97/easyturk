@@ -1,0 +1,277 @@
+<html>
+<head>
+  <title>Write captions for pictures</title>
+  <!-- easyturk depends on these libraries -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'></script>
+  <!-- end of required libraries -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js'></script>
+  <style>
+    hr {
+      border-top: 3px solid rgba(0,0,0);
+    }
+    #counter {
+      margin: 0 10px;
+      font-size: 20pt;
+      font-weight: bold;
+    }
+    img {
+      height: 600px;
+    }
+    img.example {
+      height: 200px;
+    }
+    .tasks-container {
+      font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+      max-width: 70%;
+      margin-top: 15px;
+      margin-bottom: 30px;
+      padding-top: 5px;
+      background-color: #DBDBDB;
+    }
+    .head-container {
+      max-width: 100%;
+      background-color: bisque;
+      padding: 5px;
+      margin-top: 5px;
+      box-shadow: 5px 5px 10px rgb(86, 86, 86);
+    }
+    .image-container {
+      max-width: 100%;
+      background-color: #F0EAD6;
+      padding: 5px;
+      margin-top: 5px;
+      box-shadow: 5px 5px 10px rgb(86, 86, 86);
+    }
+    #image-container img {
+      box-shadow: 5px 5px 10px rgb(86, 86, 86);
+    }
+    .question-container {
+      margin-top: 15px;
+      margin-bottom: 30px;
+      padding: 5px;
+    }
+    .instructions-container {
+      margin-top: 15px;
+      margin-bottom: 30px;
+      background-color: #F0EAD6;
+    }
+    .btn-primary {
+      width: 10rem;
+    }
+    p {
+      font-size: 17px;
+      text-align: center;
+    }
+    li {
+        font-size: 22px;
+    }
+    div {
+        font-size: 22px;
+    }
+  </style>
+</head>
+<body>
+
+<div class='container tasks-container'>
+  <!-- <div class='container head-container'>
+    <h3>Instruction</h3>
+    <h5 id="task-instruction">
+      <ul></ul>
+    </h5>
+  </div> -->
+  <!-- <hr/> -->
+  <div>
+    <div class='row'>
+      <div class='col-12'>
+        <div class='image-container'></div>
+      </div>
+    </div>
+    <hr/>
+    
+    <div class='justify-content-center question-container' style="width:100%;"></div>
+
+    <div class='row justify-content-center' style='margin-top: 10px; padding-bottom: 10px;'>
+      
+      <button id='prev-btn' class='btn btn-lg btn-primary' disabled>Back</button>
+      <div class='col-2' style="text-align: center">
+        <span id='counter'>
+          <span class='counter-top'></span> / <span class='counter-bottom'></span>
+        </span>
+      </div>
+      <button id='next-btn' class='btn btn-lg btn-primary' disabled>Next</button>
+      
+    </div>
+  </div>
+</div>
+
+<!--IMPORTANT: This import contains all the functions you need to read in your input data and send back worker outputs.-->  
+{% include "easyturk.html" %}
+
+  <script>
+    // Define some default input.
+    // It is good practice to define standard inputs for a task which will be overwritten when launching
+    // your actual task. The default inputs allow you to render and debug your task locally.
+    var DEFAULT_INPUT = [
+      {
+      'id': 0,
+      'text': 'Almost once a game, an N.F.L. player absorbs an illegal hit to the head or the neck that could put his career or worse at risk.The N.F.L. has been trying to prevent such hits during the past four years, targeting improper technique and making it a point to penalize and fine players for hits that leave them and their opponents vulnerable.Yet an Associated Press review of penalties through the first 11 weeks of the season indicated that those hits were still prevalent.The A.P. reviewed 549 penalties, 491 of which fell under the category of major infractions unnecessary roughness, unsportsmanlike conduct, roughing the passer, face masks and roughing the quarterback .Of the penalties charted during the first 162 games of the season, The A.P. identified 156 involving contact with the head and neck an average of.962 per game. Of those, 38 were for head wrenching face masks, 25 were for horse collar tackles and 93 were for hits to the head. Quarterbacks (40) and receivers (38) shared the brunt of those hits almost equally, with players at other positions absorbing the other 15 blows.The numbers can be interpreted a variety of ways.The league declined to comment, though it made a statement of sorts in the off season when it decided against the 5 percent hike in minimum fines, as allowed for in the union contract, after determining players were adjusting to the rules.A sentiment among offensive players The A.P. spoke to was that they appreciated all the N.F.L. had done to protect them. But, in the words of Titans running back Chris Johnson, they know that \"sometimes you just can\'t control where you hit somebody.\" Defensive players acknowledged they had to do their part to make the game safer.\"The stupid fouls, hitting the quarterbacks late and doing all the other stuff we\'ve done, we have to eliminate it,\" Titans safety Bernard Pollard said.JACOBS\'S SEASON DONE The Giants placed running back Brandon Jacobs on season ending injured reserve, two days after a knee injury kept him out for a second straight game .Jacobs finished the season with 238 yards rushing and 4 touchdowns the most among Giants running backs and two receptions for 13 yards in seven games.The Giants also signed linebacker Marcus Dowtin from the practice squad .STOKLEY\'S YEAR ENDS The Baltimore Ravens placed wide receiver Brandon Stokley on injured reserve, ending his season.Stokley, 37, sustained a concussion in Sunday\'s game against the Minnesota Vikings . He has had multiple concussions during his 15 year career.COACH MUM ON BOISE STATE The Atlanta Falcons offensive coordinator Dirk Koetter is not saying much about his recent interview with Boise State .Koetter confirmed Tuesday that he met with Boise State officials, but he declined to elaborate .Koetter went 26 10 as Boise State\'s coach from 1998 to. He was 40 34 at Arizona State from 2001 to. Boise State is trying to replace Chris Petersen, who took the coaching job at Washington .HANIE WAIVED The Cleveland Browns waived quarterback Caleb Hanie, who backed up starter Jason Campbell on Sunday at New England.Hanie was signed as a free agent last week when Campbell was recovering from a concussion and not a certainty to play.',
+      'option': ['aaa', 'bbb', 'ccc', 'ddd', 'eee']
+      },
+      {
+      'id': 1,
+      'text': 'Almost once a game, an N.F.L. player absorbs an illegal hit to the head or the neck that could put his career or worse at risk.The N.F.L. has been trying to prevent such hits during the past four years, targeting improper technique and making it a point to penalize and fine players for hits that leave them and their opponents vulnerable.Yet an Associated Press review of penalties through the first 11 weeks of the season indicated that those hits were still prevalent.The A.P. reviewed 549 penalties, 491 of which fell under the category of major infractions unnecessary roughness, unsportsmanlike conduct, roughing the passer, face masks and roughing the quarterback .Of the penalties charted during the first 162 games of the season, The A.P. identified 156 involving contact with the head and neck an average of.962 per game. Of those, 38 were for head wrenching face masks, 25 were for horse collar tackles and 93 were for hits to the head. Quarterbacks (40) and receivers (38) shared the brunt of those hits almost equally, with players at other positions absorbing the other 15 blows.The numbers can be interpreted a variety of ways.The league declined to comment, though it made a statement of sorts in the off season when it decided against the 5 percent hike in minimum fines, as allowed for in the union contract, after determining players were adjusting to the rules.A sentiment among offensive players The A.P. spoke to was that they appreciated all the N.F.L. had done to protect them. But, in the words of Titans running back Chris Johnson, they know that \"sometimes you just can\'t control where you hit somebody.\" Defensive players acknowledged they had to do their part to make the game safer.\"The stupid fouls, hitting the quarterbacks late and doing all the other stuff we\'ve done, we have to eliminate it,\" Titans safety Bernard Pollard said.JACOBS\'S SEASON DONE The Giants placed running back Brandon Jacobs on season ending injured reserve, two days after a knee injury kept him out for a second straight game .Jacobs finished the season with 238 yards rushing and 4 touchdowns the most among Giants running backs and two receptions for 13 yards in seven games.The Giants also signed linebacker Marcus Dowtin from the practice squad .STOKLEY\'S YEAR ENDS The Baltimore Ravens placed wide receiver Brandon Stokley on injured reserve, ending his season.Stokley, 37, sustained a concussion in Sunday\'s game against the Minnesota Vikings . He has had multiple concussions during his 15 year career.COACH MUM ON BOISE STATE The Atlanta Falcons offensive coordinator Dirk Koetter is not saying much about his recent interview with Boise State .Koetter confirmed Tuesday that he met with Boise State officials, but he declined to elaborate .Koetter went 26 10 as Boise State\'s coach from 1998 to. He was 40 34 at Arizona State from 2001 to. Boise State is trying to replace Chris Petersen, who took the coaching job at Washington .HANIE WAIVED The Cleveland Browns waived quarterback Caleb Hanie, who backed up starter Jason Campbell on Sunday at New England.Hanie was signed as a free agent last week when Campbell was recovering from a concussion and not a certainty to play.',
+      'option': ['aaa', 'bbb', 'ccc', 'ddd', 'eee']
+      },
+    ]
+
+    var input = null;
+
+    // This is where we will be collecting the answers for each image;
+    var answers = [];
+
+    // Some variables to track state of the HIT.
+    var idx = 0;
+    var enabled = false;
+
+    function main() {
+      // If this is a HIT on AMT, then replace the default input with the real input.
+      input = easyturk.getInput(DEFAULT_INPUT);
+
+      // Enable the task.
+      if (!easyturk.isPreview()){
+        enableTask();
+      }
+
+      // Set up the correct.
+      _.each(input, function() { 
+        answers.push(null); });
+
+      // Preload all images
+      _.each(input, function(input_elem) {
+        var imgUrl = input_elem['image'];
+        var img = new Image();
+        img.onload = function() { console.log('loaded image from ' + imgUrl); };
+        img.src = imgUrl;
+      });
+
+      render();
+    }
+
+    // Use the current index to update the image and description
+    function render() {
+      // Set up the image
+      // $('#task-instruction ul').empty();
+      // input[idx]['task instruction'].split('\n').forEach((item, i) => {
+      //   if (item.trim().length === 0) return;
+      //   $(`<li>${item}</li>`).appendTo('#task-instruction ul')
+      // })
+
+      let $img_container = $('.image-container');
+      $img_container.empty();
+      $(`<h4 display="inline" style="text-align:justify; text-justify:inter-ideograph; padding:30px"><strong>${ input[idx]['text'] }</strong></h4>`).appendTo($img_container);
+      
+      let $question_container = $('.question-container');
+      $question_container.empty();
+
+      let $container = $(`<div class='image-container' style="margin-bottom:15px;padding:20px"></div>`)
+      let $question = $(`<div class='questions'></div>`)
+
+      input[idx]['option'].forEach((opt, j) => {
+        $(`
+          <div class="form-check form-check">
+            <input class="form-check-input" type="radio" id="q0_${j}_ans_t" name="q0" value="${j}">
+            <label class="form-check-label" for="q0_${j}_ans_t" style="margin-right:15px">${opt}</label> 
+          </div>
+        `).appendTo($question);
+
+        $question.appendTo($container)
+        $container.appendTo($question_container)
+      })
+
+      // Refresh the counter
+      $('.counter-top').text(idx + 1);
+      $('.counter-bottom').text(input.length);
+
+      // If the UI is enabled, enable or disable the buttons depending on
+      // the index.
+      if (enabled) {
+        $('#prev-btn').prop('disabled', false);
+        $('#next-btn').prop('disabled', false);
+        if (idx == 0) {
+          $('#prev-btn').prop('disabled', true);
+        }
+        if (idx == input.length - 1) {
+          $('#next-btn').prop('disabled', true);
+        }
+      }
+    }
+
+    // Update the index, and save the text in the text area.
+    function setIdx(newIdx) {
+      if (newIdx < 0 || newIdx >= input.length) return;
+      idx = newIdx;
+      render();
+    }
+
+    function saveCaption() {
+      let res = $(`input:radio[name="q0"]:checked`).val()
+      if (res === undefined) {
+        alert('Please select an answer.')
+        return false
+      }
+      answers[idx] = res
+      return true
+    }
+
+    // Enable the UI.
+    function enableTask() {
+      enabled = true;
+      easyturk.setupSubmit();
+
+      // Enable components
+      $('#next-btn').click(function() {
+          if (saveCaption()) {
+            setIdx(idx + 1);
+            $(`input:radio[name="q0"][value="${answers[idx]}"]`).prop('checked', true)
+          }
+      });
+      $('#prev-btn').click(function() {
+          if (saveCaption()) {
+            setIdx(idx - 1);
+            $(`input:radio[name="q0"][value="${answers[idx]}"]`).prop('checked', true)
+          }
+      });
+      $('#submit-btn').prop('disabled', false);
+
+      $('#submit-btn').click(function() {
+        // Make sure to save the last one.
+        if (!saveCaption()) {
+          return false;
+        }
+        if (answers.findIndex(e => e === null) !== -1) {
+          alert("Please answer all questions before submitting.")
+          return false
+        }
+        // Copy the url and captions to the output we will return to the requester.
+        var output = input;
+        for (var i = 0; i < output.length; i++) {
+          output[i]['answers'] = answers[i];
+        }
+        if (easyturk.isPreview()) {
+          alert("This is only a preview. Here is your output: \n" + JSON.stringify(output));
+          return false;
+        } else {
+          easyturk.setOutput(output);
+          return true;
+        }
+      });
+    }
+
+    main();
+  </script>
+</body>
+</html>
